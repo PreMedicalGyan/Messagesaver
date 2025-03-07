@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Message Saver</title>
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- ✅ Login Form -->
+    <div id="loginPage" class="container">
+        <h2>Login</h2>
+        <input type="text" id="username" placeholder="Enter Username">
+        <input type="password" id="password" placeholder="Enter Password">
+        <button onclick="login()">Login</button>
+    </div>
+
+    <!-- ✅ Message App (Hidden by default) -->
+    <div id="messageApp" class="container" style="display: none;">
+        <div class="saved-messages">
+            <h2>Saved Messages</h2>
+            <ul id="messageList"></ul>
+        </div>
+
+        <div class="new-message">
+            <h2>New Message</h2>
+            <textarea id="messageInput" placeholder="Write your message..."></textarea>
+            <button onclick="saveMessage()">Save Message</button>
+        </div>
+    </div>
+
+    <script type="module" src="script.js"></script>
+</body>
+</html>
