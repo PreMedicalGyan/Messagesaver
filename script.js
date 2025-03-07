@@ -4,7 +4,6 @@ window.login = function () {
     let password = document.getElementById("password").value.trim();
 
     if (username === "Kuldeep" && password === "965396") {
-        // Login successful
         document.getElementById("loginPage").style.display = "none";
         document.getElementById("messageApp").style.display = "block";
     } else {
@@ -14,7 +13,7 @@ window.login = function () {
 
 // ✅ Firebase SDKs Import
 import { initializeApp } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-app.js";
-import { getDatabase, ref, push, onChildAdded } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
+import { getDatabase, ref, push, onChildAdded, remove } from "https://www.gstatic.com/firebasejs/11.4.0/firebase-database.js";
 
 // ✅ Firebase Configuration
 const firebaseConfig = {
@@ -51,20 +50,22 @@ window.saveMessage = function () {
     messageInput.value = "";
 };
 
-// ✅ Load Messages from Firebase
+// ✅ Load Messages with Copy & Delete Buttons
 window.loadMessages = function () {
     let messageList = document.getElementById("messageList");
     messageList.innerHTML = "";
 
     onChildAdded(messagesRef, (snapshot) => {
         let messageData = snapshot.val();
+        let messageKey = snapshot.key; // Firebase key
+
         let newMessageItem = document.createElement("li");
 
         // ✅ Message Text
         let messageText = document.createElement("span");
         messageText.textContent = messageData.message;
 
-        // ✅ Copy Button (📋 Icon)
+        // ✅ Copy Button (📋)
         let copyButton = document.createElement("button");
         copyButton.innerHTML = "📋";
         copyButton.classList.add("copy-btn");
@@ -73,9 +74,26 @@ window.loadMessages = function () {
             alert("Message Copied!");
         };
 
+        // ✅ Delete Button (🗑️) with Confirmation Popup
+        let deleteButton = document.createElement("button");
+        deleteButton.innerHTML = "🗑️";
+        deleteButton.classList.add("delete-btn");
+        deleteButton.onclick = function () {
+            let confirmDelete = confirm("Are you sure you want to delete this message?");
+            if (confirmDelete) {
+                remove(ref(database, "messages/" + messageKey));
+                alert("Message Deleted!");
+            }
+        };
+
         // ✅ Append Elements
+        let buttonContainer = document.createElement("div");
+        buttonContainer.classList.add("button-container");
+        buttonContainer.appendChild(copyButton);
+        buttonContainer.appendChild(deleteButton);
+
         newMessageItem.appendChild(messageText);
-        newMessageItem.appendChild(copyButton);
+        newMessageItem.appendChild(buttonContainer);
         messageList.appendChild(newMessageItem);
     });
 };
